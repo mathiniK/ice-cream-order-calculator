@@ -30,3 +30,5 @@ e.g.
     { "name": "driedApples", "quantity": 1 }
   ]
 }
+
+Assumptions: One scoop per cone and maximum scoops per waffle bowl is 3.
