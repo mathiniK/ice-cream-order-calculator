@@ -1,9 +1,10 @@
+// Test suite with some sample test cases
 const OrderService = require('../services/orderService');
 
 describe('OrderService', () => {
   it('should calculate the total price of the ice cream order correctly', () => {
     const orderDetails = {
-      baseFlavor: 'nuttyFruit', // Use a flavor that supports driedApples
+      baseFlavor: 'nuttyFruit', 
       scoops: 4,
       container: 'waffleBowl',
       condiments: [
@@ -13,7 +14,7 @@ describe('OrderService', () => {
       ]
     };
 
-    const expectedTotalPrice = 1175; // Update the expected price based on the new base flavor
+    const expectedTotalPrice = 1175; 
     const totalPrice = OrderService.createOrder(orderDetails);
     expect(totalPrice).toBe(expectedTotalPrice);
   });

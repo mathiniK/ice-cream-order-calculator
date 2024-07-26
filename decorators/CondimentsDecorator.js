@@ -45,7 +45,7 @@ class CondimentsDecorator {
 
   isCondimentAvailable(condimentName) {
     const condiment = prices.condiments[condimentName];
-  
+
     if (condiment && typeof condiment === 'object' && condiment.availableFor) {
       if (condiment.availableFor.includes(this.iceCream.baseFlavor)) {
         return true;
@@ -54,16 +54,16 @@ class CondimentsDecorator {
       // For condiments with fixed price (e.g., peanut butter, oreo crumbles)
       return true;
     }
-  
+
     // For dried fruits
     const driedFruits = prices.condiments.driedFruit;
     if (driedFruits && driedFruits[condimentName] && driedFruits.availableFor) {
       return driedFruits.availableFor.includes(this.iceCream.baseFlavor);
     }
-  
+
     return false;
   }
-  
+
 }
 
 module.exports = CondimentsDecorator;

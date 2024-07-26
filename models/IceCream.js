@@ -9,7 +9,7 @@ class IceCream {
     this.scoops = scoops;
     this.condiments = [];
     this.container = null;
-    this.additionalContainers = 0; // To keep track of additional containers
+    this.additionalContainers = 0; 
     this.totalPrice = 0;
   }
 
