@@ -9,16 +9,12 @@ class IceCream {
     this.scoops = scoops;
     this.condiments = [];
     this.container = null;
+    this.additionalContainers = 0; // To keep track of additional containers
     this.totalPrice = 0;
   }
 
-  addCondiment(condimentName) {
-    const condiment = prices.condiments[condimentName];
-    if (typeof condiment === 'object' && condiment.price) {
-      this.condiments.push(condiment);
-    } else if (typeof condiment === 'number') {
-      this.condiments.push({ price: condiment });
-    }
+  addCondiment(condiment) {
+    this.condiments.push(condiment);
   }
 
   setContainer(containerName) {
@@ -26,7 +22,7 @@ class IceCream {
     if (!container) {
       throw new Error(`Container ${containerName} not found`);
     }
-    this.container = { price: container };
+    this.container = { name: containerName, price: container };
   }
 
   calculatePrice() {
@@ -38,9 +34,10 @@ class IceCream {
       this.totalPrice += condiment.price;
     });
 
-    // Add the price of the container
+    // Add the price of the container and any additional containers
     if (this.container) {
-      this.totalPrice += this.container.price;
+      const containerPrice = prices.containers[this.container.name];
+      this.totalPrice += containerPrice * (1 + this.additionalContainers);
     }
   }
 }

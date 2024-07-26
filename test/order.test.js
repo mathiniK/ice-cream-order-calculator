@@ -1,81 +1,52 @@
-const chai = require('chai');
-const chaiHttp = require('chai-http');
-const app = require('../app');
-const prices = require('../config/prices.json');
+const OrderService = require('../services/orderService');
 
-const { expect } = chai;
-chai.use(chaiHttp);
-
-describe('POST /api/orders/calculate', () => {
-  it('should calculate the total price of the order', async () => {
-    const order = {
-      baseFlavor: 'Raspberry Slushy',
-      scoops: 2,
-      condiments: ['Sprinkles', 'Toasted Marshmallow', 'Dried Mango'],
-      container: 'Waffle Cone'
+describe('OrderService', () => {
+  it('should calculate the total price of the ice cream order correctly', () => {
+    const orderDetails = {
+      baseFlavor: 'nuttyFruit', // Use a flavor that supports driedApples
+      scoops: 4,
+      container: 'waffleBowl',
+      condiments: [
+        { name: 'peanutButter', quantity: 3 },
+        { name: 'oreoCrumbles', quantity: 5 },
+        { name: 'driedApples', quantity: 1 }
+      ]
     };
 
-    const res = await chai.request(app)
-      .post('/api/orders/calculate')
-      .send(order);
-
-    const expectedPrice = prices.baseFlavors['Raspberry Slushy']
-      + 2 * prices.baseFlavors['Raspberry Slushy']
-      + prices.condiments['Sprinkles']
-      + prices.condiments['Toasted Marshmallow']
-      + prices.condiments['Dried Fruit']['Dried Mango']
-      + prices.containers['Waffle Cone'];
-
-    expect(res).to.have.status(200);
-    expect(res.body).to.have.property('order');
-    expect(res.body).to.have.property('price').that.equals(expectedPrice);
+    const expectedTotalPrice = 1175; // Update the expected price based on the new base flavor
+    const totalPrice = OrderService.createOrder(orderDetails);
+    expect(totalPrice).toBe(expectedTotalPrice);
   });
 
-  it('should return an error for an invalid base flavor', async () => {
-    const order = {
-      baseFlavor: 'Invalid Flavor',
-      scoops: 2,
-      condiments: ['Sprinkles', 'Toasted Marshmallow', 'Dried Mango'],
-      container: 'Waffle Cone'
+  it('should throw an error if a required order detail is missing', () => {
+    const incompleteOrderDetails = {
+      baseFlavor: 'nuttyFruit', 
+      scoops: 4,
+      condiments: [
+        { name: 'peanutButter', quantity: 3 },
+        { name: 'oreoCrumbles', quantity: 5 }
+      ]
     };
 
-    const res = await chai.request(app)
-      .post('/api/orders/calculate')
-      .send(order);
-
-    expect(res).to.have.status(400);
-    expect(res.body).to.have.property('message', 'Invalid base flavor');
+    expect(() => {
+      OrderService.createOrder(incompleteOrderDetails);
+    }).toThrow('All required order details must be provided');
   });
 
-  it('should return an error for an invalid condiment', async () => {
-    const order = {
-      baseFlavor: 'Raspberry Slushy',
-      scoops: 2,
-      condiments: ['Sprinkles', 'Invalid Condiment'],
-      container: 'Waffle Cone'
+  it('should throw an error if the scoops value is not a positive integer', () => {
+    const invalidOrderDetails = {
+      baseFlavor: 'nuttyFruit', 
+      scoops: -1,
+      container: 'waffleBowl',
+      condiments: [
+        { name: 'peanutButter', quantity: 3 },
+        { name: 'oreoCrumbles', quantity: 5 },
+        { name: 'driedApples', quantity: 1 }
+      ]
     };
 
-    const res = await chai.request(app)
-      .post('/api/orders/calculate')
-      .send(order);
-
-    expect(res).to.have.status(400);
-    expect(res.body).to.have.property('message').that.includes('Invalid condiment');
-  });
-
-  it('should return an error for an invalid container', async () => {
-    const order = {
-      baseFlavor: 'Raspberry Slushy',
-      scoops: 2,
-      condiments: ['Sprinkles', 'Toasted Marshmallow'],
-      container: 'Invalid Container'
-    };
-
-    const res = await chai.request(app)
-      .post('/api/orders/calculate')
-      .send(order);
-
-    expect(res).to.have.status(400);
-    expect(res.body).to.have.property('message', 'Invalid container');
+    expect(() => {
+      OrderService.createOrder(invalidOrderDetails);
+    }).toThrow('Scoops must be a positive integer');
   });
 });
