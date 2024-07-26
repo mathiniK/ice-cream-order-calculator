@@ -18,12 +18,20 @@ class IceCream {
   }
 
   setContainer(containerName) {
-    const container = prices.containers[containerName];
-    if (!container) {
+    // Handle special case for iceCreamSandwichWafers
+    if (containerName === 'iceCreamSandwichWafers') {
+      this.container = { name: containerName, price: 0 };
+      return; // No further processing needed for this container type
+    }
+  
+    // For other container types, validate and set the container price
+    const containerPrice = prices.containers[containerName];
+    if (!containerPrice) {
       throw new Error(`Container ${containerName} not found`);
     }
-    this.container = { name: containerName, price: container };
-  }
+  
+    this.container = { name: containerName, price: containerPrice };
+  }  
 
   calculatePrice() {
     // Calculate the price based on base flavor and scoops
