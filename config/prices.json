@@ -1,0 +1,37 @@
+{
+  "baseFlavors": {
+    "raspberrySlushy": 200,
+    "cocoCoffee": 350,
+    "nuttyFruit": 150,
+    "pistachioDelight": 350
+  },
+  "condiments": {
+    "sprinkles": {
+      "price": 50,
+      "availableFor": ["raspberrySlushy", "nuttyFruit"]
+    },
+    "toastedMarshmallow": {
+      "price": 100,
+      "availableFor": ["raspberrySlushy", "nuttyFruit", "pistachioDelight"]
+    },
+    "toastedAlmondFlakes": {
+      "price": 150,
+      "availableFor": ["nuttyFruit", "cocoCoffee", "pistachioDelight"]
+    },
+    "peanutButter": 50,
+    "oreoCrumbles": 60,
+    "driedFruit": {
+      "driedApples": 25,
+      "driedMango": 30,
+      "driedApricot": 40,
+      "driedBlueberry": 45,
+      "availableFor": ["raspberrySlushy", "nuttyFruit"]
+    }
+  },
+  "containers": {
+    "waferCone": 20,
+    "waffleCone": 40,
+    "waffleBowl": 50,
+    "iceCreamSandwichWafers": 0
+  }
+}
